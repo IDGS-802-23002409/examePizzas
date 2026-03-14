@@ -75,7 +75,7 @@
           <tbody>
             {% if carrito %}
               {% for item in carrito %}
-              <tr onclick="seleccionar(this, {{ item.id }})" id="fila-{{ item.id }}">
+              <tr onclick="seleccionar(this, {{ loop.index0 }})" id="fila-{{ loop.index0 }}">
                 <td class="col-bullet">•</td>
                 <td>{{ item.tamano }}</td>
                 <td>{{ item.ingredientes }}</td>
