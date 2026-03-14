@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="main-container">
+
+  <!-- CONSULTA POR DÍA -->
+  <div class="panel-consulta">
+    <h2>Consulta por Día de la Semana</h2>
+    <form method="POST" action="{{ url_for('consultas.por_dia') }}" class="consulta-form">
+      {{ form_dia.hidden_tag() }}
+      <label>Día:</label>
+      {{ form_dia.dia() }}
+      <button type="submit" class="btn-win">Buscar</button>
+    </form>
+
+    {% if resultados_dia is defined and resultados_dia %}
+      <p><strong>Ventas del {{ dia_nombre | capitalize }}:</strong></p>
+      <table class="tabla-consulta">
+        <thead>
+          <tr>
+            <th>ID</th><th>Cliente</th><th>Dirección</th><th>Teléfono</th><th>Fecha</th><th>Total</th><th>Detalle</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in resultados_dia %}
+          <tr>
+            <td>{{ row.pedido.id_pedido }}</td>
+            <td>{{ row.cliente.nombre }}</td>
+            <td>{{ row.cliente.direccion }}</td>
+            <td>{{ row.cliente.telefono }}</td>
+            <td>{{ row.pedido.fecha }}</td>
+            <td>${{ '%.2f' | format(row.pedido.total) }}</td>
+            <td><a href="{{ url_for('consultas.detalle', id_pedido=row.pedido.id_pedido) }}">Ver</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="total-acumulado">Total del día: ${{ '%.2f' | format(total_dia) }}</div>
+    {% elif resultados_dia is defined %}
+      <p>No hay ventas para ese día.</p>
+    {% endif %}
+  </div>
+
+  <!-- CONSULTA POR MES -->
+  <div class="panel-consulta">
+    <h2>Consulta por Mes</h2>
+    <form method="POST" action="{{ url_for('consultas.por_mes') }}" class="consulta-form">
+      {{ form_mes.hidden_tag() }}
+      <label>Mes:</label>
+      {{ form_mes.mes() }}
+      <button type="submit" class="btn-win">Buscar</button>
+    </form>
+
+    {% if resultados_mes is defined and resultados_mes %}
+      <p><strong>Ventas de {{ mes_nombre }}:</strong></p>
+      <table class="tabla-consulta">
+        <thead>
+          <tr>
+            <th>ID</th><th>Cliente</th><th>Dirección</th><th>Teléfono</th><th>Fecha</th><th>Total</th><th>Detalle</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in resultados_mes %}
+          <tr>
+            <td>{{ row.pedido.id_pedido }}</td>
+            <td>{{ row.cliente.nombre }}</td>
+            <td>{{ row.cliente.direccion }}</td>
+            <td>{{ row.cliente.telefono }}</td>
+            <td>{{ row.pedido.fecha }}</td>
+            <td>${{ '%.2f' | format(row.pedido.total) }}</td>
+            <td><a href="{{ url_for('consultas.detalle', id_pedido=row.pedido.id_pedido) }}">Ver</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="total-acumulado">Total acumulado del mes: ${{ '%.2f' | format(total_mes) }}</div>
+    {% elif resultados_mes is defined %}
+      <p>No hay ventas para ese mes.</p>
+    {% endif %}
+  </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="main-wrap">
+
+  <!-- ===== FORMULARIO COMPLETO: AGREGAR ===== -->
+  <form method="POST" action="{{ url_for('pedidos.agregar') }}" id="form-agregar">
+    {{ form.hidden_tag() }}
+
+    <!-- FILA 1: Datos del cliente -->
+    <div class="panel">
+      <div class="panel-cliente">
+        <label>Nombre:</label>
+        {{ form.nombre(size=16, value=session.get('cliente', {}).get('nombre', '')) }}
+
+        <label>Dirección:</label>
+        {{ form.direccion(size=14, value=session.get('cliente', {}).get('direccion', '')) }}
+
+        <label>Teléfono:</label>
+        {{ form.telefono(size=12, value=session.get('cliente', {}).get('telefono', '')) }}
+
+        <div class="campo-fecha">
+          <label>Fecha:</label>
+          {{ form.fecha_dia(size=3, placeholder='DD', value=session.get('cliente', {}).get('fecha_dia', '')) }}
+          {{ form.fecha_mes() }}
+          {{ form.fecha_anio(size=5, placeholder='AAAA', value=session.get('cliente', {}).get('fecha_anio', '')) }}
+        </div>
+      </div>
+    </div>
+
+    <!-- FILA 2: Tamaño + Ingredientes + Num Pizzas + Agregar -->
+    <div class="panel">
+      <div class="panel-pizza">
+
+        <fieldset class="grupo-tamano">
+          <legend>Tamaño Pizza</legend>
+          {% for subfield in form.tamano %}
+            <label>{{ subfield }} {{ subfield.label.text }}</label>
+          {% endfor %}
+        </fieldset>
+
+        <fieldset class="grupo-ingredientes">
+          <legend>Ingredientes</legend>
+          {% for subfield in form.ingredientes %}
+            <label>{{ subfield }} {{ subfield.label.text }}</label>
+          {% endfor %}
+        </fieldset>
+
+        <div class="grupo-cantidad">
+          <label>Núm. de Pizzas.</label>
+          {{ form.num_pizzas(size=10) }}
+          <button type="submit" class="btn-win">Agregar</button>
+        </div>
+
+      </div>
+    </div>
+  </form>
+
+  <!-- FILA 3: Tabla de pedido + Panel Ventas del día -->
+  <div class="panel-inferior">
+
+    <!-- TABLA DETALLE -->
+    <div class="panel-tabla">
+      <div class="tabla-scroll">
+        <table class="tabla-pedido" id="tabla-carrito">
+          <thead>
+            <tr>
+              <th class="col-bullet"></th>
+              <th>Tamaño</th>
+              <th>Ingredientes</th>
+              <th>Núm. Pizzas</th>
+              <th>SubTotal</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% if carrito %}
+              {% for item in carrito %}
+              <tr onclick="seleccionar(this, {{ loop.index0 }})" id="fila-{{ loop.index0 }}">
+                <td class="col-bullet">•</td>
+                <td>{{ item.tamano }}</td>
+                <td>{{ item.ingredientes }}</td>
+                <td>{{ item.num_pizzas }}</td>
+                <td>${{ '%.2f' | format(item.subtotal) }}</td>
+              </tr>
+              {% endfor %}
+            {% else %}
+              <tr id="fila-vacia">
+                <td class="col-bullet">•</td>
+                <td></td><td></td><td></td><td></td>
+              </tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- BOTONES: Quitar y Terminar -->
+      <div class="acciones-tabla">
+        <!-- Quitar requiere una fila seleccionada -->
+        <form method="POST" action="{{ url_for('pedidos.quitar', indice=0) }}" id="form-quitar">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <input type="hidden" name="indice" id="input-indice" value="">
+          <button type="button" class="btn-win" onclick="quitar()">Quitar</button>
+        </form>
+
+        <form method="POST" action="{{ url_for('pedidos.terminar') }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button type="submit" class="btn-win">Terminar</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- PANEL VENTAS DEL DÍA -->
+    <div class="panel-ventas">
+      <div class="panel-ventas-titulo">Ventas del día</div>
+      {% if ventas_hoy %}
+        {% for v in ventas_hoy %}
+          <div class="venta-item">{{ v.cliente.nombre }}&nbsp;&nbsp;total&nbsp;&nbsp;${{ '%.0f' | format(v.pedido.total) }}</div>
+        {% endfor %}
+        <div class="total-ventas">Ventas totales del día:&nbsp;&nbsp;${{ '%.0f' | format(total_hoy) }}</div>
+      {% endif %}
+      <a href="{{ url_for('consultas.index') }}" style="margin-top:auto;text-decoration:none;">
+        <button class="btn-ventas-dia">Ventas totales por día</button>
+      </a>
+    </div>
+
+  </div><!-- fin panel-inferior -->
+</div><!-- fin main-wrap -->
+
+<script>
+  var filaSeleccionada = -1;
+
+  function seleccionar(tr, idx) {
+    // quitar selección previa
+    document.querySelectorAll('#tabla-carrito tbody tr').forEach(function(r){
+      r.classList.remove('seleccionada');
+    });
+    tr.classList.add('seleccionada');
+    filaSeleccionada = idx;
+  }
+
+  function quitar() {
+    if (filaSeleccionada < 0) {
+      alert('Selecciona una pizza de la tabla primero.');
+      return;
+    }
+    var form = document.getElementById('form-quitar');
+    form.action = '/quitar/' + filaSeleccionada;
+    form.submit();
+  }
+</script>
+
+{% endblock %}

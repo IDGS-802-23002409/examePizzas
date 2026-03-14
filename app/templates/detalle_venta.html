@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="main-container">
+  <div class="panel-consulta">
+    <h2>Detalle del Pedido #{{ pedido.id_pedido }}</h2>
+
+    <div class="detalle-header">
+      <p><strong>Cliente:</strong> {{ cliente.nombre }}</p>
+      <p><strong>Dirección:</strong> {{ cliente.direccion }}</p>
+      <p><strong>Teléfono:</strong> {{ cliente.telefono }}</p>
+      <p><strong>Fecha:</strong> {{ pedido.fecha }}</p>
+      <div class="badge-total">Total: ${{ '%.2f' | format(pedido.total) }}</div>
+    </div>
+
+    <table class="tabla-consulta">
+      <thead>
+        <tr>
+          <th>Tamaño</th>
+          <th>Ingredientes (catálogo)</th>
+          <th>Cantidad</th>
+          <th>Subtotal</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for detalle, pizza in detalles %}
+        <tr>
+          <td>{{ pizza.tamano }}</td>
+          <td>{{ pizza.ingredientes if pizza.ingredientes else 'Incluidos en el pedido' }}</td>
+          <td>{{ detalle.cantidad }}</td>
+          <td>${{ '%.2f' | format(detalle.subtotal) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <br>
+    <a href="{{ url_for('consultas.index') }}">
+      <button class="btn-win">← Volver a Consultas</button>
+    </a>
+  </div>
+</div>
+
+{% endblock %}

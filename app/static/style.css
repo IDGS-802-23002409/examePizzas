@@ -1,0 +1,313 @@
+/* ================================================
+   EXAMEN PIZZAS – Estilo fiel a la captura Windows
+   ================================================ */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    background-color: #7a9eba;   /* azul acero del fondo de la ventana */
+}
+
+/* -------- NAVBAR -------- */
+.navbar {
+    background-color: #4a6fa5;
+    padding: 4px 10px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.navbar a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 2px;
+}
+.navbar a:hover { background-color: #3a5a8a; }
+.navbar .brand { font-weight: bold; font-size: 13px; color: #fff; }
+
+/* -------- FLASH -------- */
+.flashes { list-style: none; margin: 5px 8px; }
+.flashes li {
+    padding: 5px 10px;
+    border-radius: 2px;
+    margin-bottom: 3px;
+    font-size: 12px;
+}
+.flashes li.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+.flashes li.danger  { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+.flashes li.warning { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+
+/* -------- CONTENEDOR PRINCIPAL -------- */
+.main-wrap {
+    margin: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* -------- PANEL GENÉRICO -------- */
+.panel {
+    background-color: #d0cec8;
+    border: 2px solid;
+    border-color: #ffffff #808080 #808080 #ffffff;  /* efecto raised */
+    padding: 10px 12px;
+}
+
+/* -------- PANEL CLIENTE (fila superior) -------- */
+.panel-cliente {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+.panel-cliente label { font-size: 12px; white-space: nowrap; }
+.panel-cliente input[type="text"],
+.panel-cliente input[type="number"] {
+    border: 1px inset #808080;
+    background: white;
+    padding: 1px 4px;
+    font-size: 12px;
+}
+.campo-fecha {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 12px;
+}
+.campo-fecha select, .campo-fecha input {
+    border: 1px inset #808080;
+    background: white;
+    padding: 1px 4px;
+    font-size: 12px;
+}
+
+/* -------- PANEL PIZZA (segunda fila) -------- */
+.panel-pizza {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+}
+
+.grupo-tamano, .grupo-ingredientes {
+    border: 1px solid #808080;
+    padding: 4px 10px 8px;
+    background: #d0cec8;
+    min-width: 130px;
+}
+.grupo-tamano legend, .grupo-ingredientes legend {
+    font-size: 12px;
+    padding: 0 4px;
+}
+.grupo-tamano label,
+.grupo-ingredientes label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    padding: 2px 0;
+    cursor: pointer;
+}
+
+.grupo-cantidad {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-top: 2px;
+}
+.grupo-cantidad > label { font-size: 12px; }
+.grupo-cantidad input {
+    width: 100px;
+    border: 1px inset #808080;
+    background: white;
+    padding: 2px 4px;
+    font-size: 12px;
+}
+
+/* -------- BOTONES ESTILO WINDOWS -------- */
+.btn-win {
+    background-color: #d0cec8;
+    border-top: 2px solid #ffffff;
+    border-left: 2px solid #ffffff;
+    border-right: 2px solid #404040;
+    border-bottom: 2px solid #404040;
+    padding: 3px 18px;
+    font-size: 12px;
+    cursor: pointer;
+    min-width: 75px;
+}
+.btn-win:active {
+    border-top: 2px solid #404040;
+    border-left: 2px solid #404040;
+    border-right: 2px solid #ffffff;
+    border-bottom: 2px solid #ffffff;
+}
+
+/* -------- PANEL INFERIOR -------- */
+.panel-inferior {
+    display: flex;
+    gap: 8px;
+    align-items: stretch;
+}
+
+/* -------- TABLA DE PEDIDO -------- */
+.panel-tabla {
+    flex: 1;
+    background-color: #d0cec8;
+    border-top: 2px solid #ffffff;
+    border-left: 2px solid #ffffff;
+    border-right: 2px solid #404040;
+    border-bottom: 2px solid #404040;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.tabla-scroll {
+    background-color: #b0aaa4;
+    border: 1px inset #808080;
+    min-height: 130px;
+    overflow-y: auto;
+}
+
+.tabla-pedido {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+.tabla-pedido th {
+    background-color: #d0cec8;
+    border-bottom: 1px solid #808080;
+    border-right: 1px solid #808080;
+    padding: 3px 8px;
+    text-align: left;
+    font-weight: normal;
+    white-space: nowrap;
+}
+.tabla-pedido td {
+    padding: 2px 8px;
+    border-right: 1px solid #a0a0a0;
+    background-color: #c8c4bc;
+    cursor: pointer;
+    white-space: nowrap;
+}
+.tabla-pedido tr.seleccionada td {
+    background-color: #000080;
+    color: white;
+}
+.tabla-pedido .col-bullet { width: 20px; text-align: center; }
+
+.acciones-tabla {
+    display: flex;
+    gap: 60px;
+}
+
+/* -------- PANEL VENTAS DEL DÍA -------- */
+.panel-ventas {
+    width: 260px;
+    min-width: 220px;
+    background-color: #c0bdb8;
+    border: 1px dashed #606060;
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.panel-ventas-titulo {
+    font-size: 12px;
+    margin-bottom: 4px;
+    font-weight: normal;
+}
+.venta-item {
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    padding: 2px 0;
+}
+.total-ventas {
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+    padding: 6px 0 4px;
+}
+.btn-ventas-dia {
+    margin-top: auto;
+    width: 100%;
+    padding: 4px;
+    font-size: 12px;
+    background-color: #d0cec8;
+    border-top: 2px solid #ffffff;
+    border-left: 2px solid #ffffff;
+    border-right: 2px solid #404040;
+    border-bottom: 2px solid #404040;
+    cursor: pointer;
+}
+
+/* -------- CONSULTAS -------- */
+.panel-consulta {
+    background-color: #d0cec8;
+    border: 2px solid;
+    border-color: #ffffff #808080 #808080 #ffffff;
+    padding: 10px 12px;
+    margin: 8px;
+}
+.panel-consulta h2 {
+    font-size: 13px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #808080;
+    padding-bottom: 4px;
+}
+.consulta-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+.consulta-form label { font-size: 12px; }
+.consulta-form select {
+    border: 1px inset #808080;
+    background: white;
+    padding: 2px 4px;
+    font-size: 12px;
+}
+
+.tabla-consulta {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+.tabla-consulta th {
+    background-color: #4a6fa5;
+    color: white;
+    padding: 3px 8px;
+    text-align: left;
+    font-weight: normal;
+}
+.tabla-consulta td {
+    border-bottom: 1px solid #c0c0c0;
+    padding: 3px 8px;
+    background-color: white;
+}
+.tabla-consulta a { color: #0000cc; text-decoration: underline; }
+.total-acumulado {
+    margin-top: 8px;
+    font-weight: bold;
+    font-size: 13px;
+    text-align: right;
+}
+
+/* -------- DETALLE -------- */
+.detalle-header { margin-bottom: 10px; }
+.detalle-header p { font-size: 12px; margin-bottom: 2px; }
+.badge-total {
+    font-size: 14px;
+    font-weight: bold;
+    background-color: #4a6fa5;
+    color: white;
+    padding: 3px 10px;
+    display: inline-block;
+    margin-top: 4px;
+}
