@@ -3,7 +3,7 @@
 
 <div class="main-wrap">
 
-  <!-- ===== FORMULARIO COMPLETO: AGREGAR ===== -->
+  <!-- ===== FORMULARIO AGREGAR ===== -->
   <form method="POST" action="{{ url_for('pedidos.agregar') }}" id="form-agregar">
     {{ form.hidden_tag() }}
 
@@ -11,19 +11,19 @@
     <div class="panel">
       <div class="panel-cliente">
         <label>Nombre:</label>
-        {{ form.nombre(size=16, value=session.get('cliente', {}).get('nombre', '')) }}
+        {{ form.nombre(size=16) }}
 
         <label>Dirección:</label>
-        {{ form.direccion(size=14, value=session.get('cliente', {}).get('direccion', '')) }}
+        {{ form.direccion(size=14) }}
 
         <label>Teléfono:</label>
-        {{ form.telefono(size=12, value=session.get('cliente', {}).get('telefono', '')) }}
+        {{ form.telefono(size=12) }}
 
         <div class="campo-fecha">
           <label>Fecha:</label>
-          {{ form.fecha_dia(size=3, placeholder='DD', value=session.get('cliente', {}).get('fecha_dia', '')) }}
+          {{ form.fecha_dia(size=3, placeholder='DD') }}
           {{ form.fecha_mes() }}
-          {{ form.fecha_anio(size=5, placeholder='AAAA', value=session.get('cliente', {}).get('fecha_anio', '')) }}
+          {{ form.fecha_anio(size=5, placeholder='AAAA') }}
         </div>
       </div>
     </div>
@@ -56,7 +56,7 @@
     </div>
   </form>
 
-  <!-- FILA 3: Tabla de pedido + Panel Ventas del día -->
+  <!-- FILA 3: Tabla + Panel Ventas del día -->
   <div class="panel-inferior">
 
     <!-- TABLA DETALLE -->
@@ -75,7 +75,7 @@
           <tbody>
             {% if carrito %}
               {% for item in carrito %}
-              <tr onclick="seleccionar(this, {{ loop.index0 }})" id="fila-{{ loop.index0 }}">
+              <tr onclick="seleccionar(this, {{ item.id }})" id="fila-{{ item.id }}">
                 <td class="col-bullet">•</td>
                 <td>{{ item.tamano }}</td>
                 <td>{{ item.ingredientes }}</td>
@@ -84,7 +84,7 @@
               </tr>
               {% endfor %}
             {% else %}
-              <tr id="fila-vacia">
+              <tr>
                 <td class="col-bullet">•</td>
                 <td></td><td></td><td></td><td></td>
               </tr>
@@ -93,12 +93,10 @@
         </table>
       </div>
 
-      <!-- BOTONES: Quitar y Terminar -->
+      <!-- BOTONES -->
       <div class="acciones-tabla">
-        <!-- Quitar requiere una fila seleccionada -->
-        <form method="POST" action="{{ url_for('pedidos.quitar', indice=0) }}" id="form-quitar">
+        <form method="POST" id="form-quitar" action="/quitar/0">
           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-          <input type="hidden" name="indice" id="input-indice" value="">
           <button type="button" class="btn-win" onclick="quitar()">Quitar</button>
         </form>
 
@@ -127,24 +125,23 @@
 </div><!-- fin main-wrap -->
 
 <script>
-  var filaSeleccionada = -1;
+  var itemSeleccionado = -1;
 
-  function seleccionar(tr, idx) {
-    // quitar selección previa
+  function seleccionar(tr, itemId) {
     document.querySelectorAll('#tabla-carrito tbody tr').forEach(function(r){
       r.classList.remove('seleccionada');
     });
     tr.classList.add('seleccionada');
-    filaSeleccionada = idx;
+    itemSeleccionado = itemId;
   }
 
   function quitar() {
-    if (filaSeleccionada < 0) {
+    if (itemSeleccionado < 0) {
       alert('Selecciona una pizza de la tabla primero.');
       return;
     }
     var form = document.getElementById('form-quitar');
-    form.action = '/quitar/' + filaSeleccionada;
+    form.action = '/quitar/' + itemSeleccionado;
     form.submit();
   }
 </script>
